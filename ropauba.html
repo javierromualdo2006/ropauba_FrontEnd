@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RopaUBA</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Encabezado -->
+    <header>
+        <div class="logo">
+            <h1>RopaUBA</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#productos">Productos</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Banner de bienvenida -->
+    <section class="hero">
+        <h2>Encuentra tu estilo perfecto</h2>
+        <p>Moda moderna a precios accesibles</p>
+        <a href="#productos" class="cta-button">Explorar ahora</a>
+    </section>
+
+    <!-- Sección de productos destacados -->
+    <section id="productos" class="productos-section">
+        <h2>Nuestros Productos</h2>
+        <div class="productos-container">
+            <div class="producto">
+                <img src="camiseta.jpg" alt="Camiseta">
+                <h3>Camiseta Básica</h3>
+                <p>$-</p>
+                <a href="#" class="add-to-cart">Agregar al carrito</a>
+            </div>
+            <div class="producto">
+                <img src="pantalones.jpg" alt="Pantalones">
+                <h3>Pantalones Casual</h3>
+                <p>$-</p>
+                <a href="#" class="add-to-cart">Agregar al carrito</a>
+            </div>
+            <div class="producto">
+                <img src="chaqueta.jpg" alt="Chaqueta">
+                <h3>Chaqueta Moderna</h3>
+                <p>$-</p>
+                <a href="#" class="add-to-cart">Agregar al carrito</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de contacto -->
+    <section id="contacto" class="contacto-section">
+        <h2>Contáctanos</h2>
+        <form action="#" method="POST">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required>
+
+            <label for="email">Correo electrónico:</label>
+            <input type="email" id="email" name="email" placeholder="Tu correo" required>
+
+            <label for="mensaje">Mensaje:</label>
+            <textarea id="mensaje" name="mensaje" placeholder="Tu mensaje" required></textarea>
+
+            <button type="submit" class="submit-button">Enviar mensaje</button>
+        </form>
+    </section>
+
+    <!-- Pie de página -->
+    <footer>
+        <p>&copy; 2024 RopaUBA Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>

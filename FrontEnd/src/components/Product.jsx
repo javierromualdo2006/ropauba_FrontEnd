@@ -19,9 +19,6 @@ const productStyle = {
   backgroundColor: '#0088cc', // Fondo celeste
   color: '#ffffff', // Texto blanco
   textAlign: 'center',
-  margin: '10px', // Espacio entre tarjetas
-  flex: '0 1 calc(30% - 20px)', // Cada tarjeta ocupa el 30% menos 20px para el margen
-  boxSizing: 'border-box', // Para asegurar que el padding no afecte el ancho total
   transition: 'transform 0.3s',
 };
 

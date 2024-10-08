@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 function ProductList({ products, updateProductStatus, changeProductStatus }) {
   return (
@@ -11,7 +11,8 @@ function ProductList({ products, updateProductStatus, changeProductStatus }) {
             <img src={product.image} alt={product.title} style={imageStyle} />
             <div style={infoStyle}>
               <h3>{product.title}</h3>
-              <p>{product.description}</p>
+              {/* Mostrar descripción truncada y botón "Ver más" si es necesario */}
+              <ProductDescription description={product.description} />
               <p>Precio: ${product.price}</p>
               <p>Stock: {product.stock}</p>
               <p>Estado: 
@@ -31,6 +32,28 @@ function ProductList({ products, updateProductStatus, changeProductStatus }) {
             </div>
           </div>
         ))
+      )}
+    </div>
+  );
+}
+
+function ProductDescription({ description }) {
+  const [isExpanded, setIsExpanded] = useState(false); // Estado para controlar la expansión de la descripción
+
+  const toggleDescription = () => {
+    setIsExpanded(!isExpanded); // Cambia el estado al hacer clic
+  };
+
+  return (
+    <div>
+      <p style={descriptionStyle}>
+        {isExpanded ? description : `${description.substring(0, 25)}...`}
+      </p>
+      {/* Botón para alternar la descripción */}
+      {description.length > 25 && (
+        <button onClick={toggleDescription} style={toggleButtonStyle}>
+          {isExpanded ? 'Ver menos' : 'Ver más'}
+        </button>
       )}
     </div>
   );
@@ -74,6 +97,22 @@ const buttonStyle = {
   border: 'none',
   cursor: 'pointer',
   fontSize: '12px',
+};
+
+const toggleButtonStyle = {
+  backgroundColor: '#00BFFF', // Color celeste
+  color: '#ffffff',
+  border: 'none',
+  borderRadius: '20px',
+  cursor: 'pointer',
+  fontSize: '14px',
+  padding: '5px 10px',
+  marginTop: '5px', // Espaciado entre la descripción y el botón
+};
+
+const descriptionStyle = {
+  fontSize: '14px',
+  margin: '10px 0',
 };
 
 export default ProductList;

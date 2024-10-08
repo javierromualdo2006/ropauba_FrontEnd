@@ -1,12 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 function Product({ product }) {
+  const [isExpanded, setIsExpanded] = useState(false); // Estado para controlar la expansión de la descripción
+
+  const toggleDescription = () => {
+    setIsExpanded(!isExpanded); // Cambia el estado al hacer clic
+  };
+
   return (
     <div style={productStyle}>
       <img src={product.image} alt={product.title} style={imageStyle} />
       <h3 style={titleStyle}>{product.title}</h3>
-      <p style={descriptionStyle}>{product.description}</p>
       <p style={priceStyle}>${product.price.toFixed(2)}</p>
+      
+      {/* Muestra la descripción expandida o colapsada */}
+      <p style={descriptionStyle}>
+        {isExpanded ? product.description : `${product.description.substring(0, 50)}...`} 
+        {product.description.length > 50 && (
+          <button onClick={toggleDescription} style={toggleButtonStyle}>
+            {isExpanded ? 'Ver menos' : 'Ver más'}
+          </button>
+        )}
+      </p>
+
       <button style={buttonStyle}>Comprar</button>
     </div>
   );
@@ -52,6 +68,15 @@ const buttonStyle = {
   borderRadius: '20px',
   cursor: 'pointer',
   fontSize: '16px',
+};
+
+const toggleButtonStyle = {
+  backgroundColor: 'transparent',
+  color: '#ffffff',
+  border: 'none',
+  cursor: 'pointer',
+  fontSize: '14px',
+  textDecoration: 'underline',
 };
 
 export default Product;

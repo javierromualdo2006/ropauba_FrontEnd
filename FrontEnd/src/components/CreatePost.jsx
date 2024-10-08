@@ -8,10 +8,17 @@ function CreatePost({ addProduct, goToHomePage }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
+    // Verifica si el precio es nulo o vacío
+    if (price.trim() === '' || isNaN(price) || parseFloat(price) <= 0) {
+      alert('Por favor, ingrese un precio válido mayor que 0.');
+      return;
+    }
+
     const newProduct = { 
       title, 
       description, 
-      price, 
+      price: parseFloat(price), // Asegurarse de que el precio es un número
       image, 
       stock: 10, // Stock inicial
       status: 'pendiente' // Estado inicial
@@ -29,19 +36,29 @@ function CreatePost({ addProduct, goToHomePage }) {
           value={title} 
           onChange={(e) => setTitle(e.target.value)} 
           required
+          maxLength={30} // Limitar a 30 caracteres
         />
         <textarea 
           placeholder="Descripción" 
           value={description} 
           onChange={(e) => setDescription(e.target.value)} 
           required
+          maxLength={150} // Limitar a 150 caracteres
         />
         <input 
-          type="number" 
+          type="text" 
           placeholder="Precio" 
           value={price} 
-          onChange={(e) => setPrice(e.target.value)} 
+          onChange={(e) => {
+            // Asegurarse de que solo se ingresen números
+            const value = e.target.value;
+            if (/^\d*\.?\d*$/.test(value) && value.length <= 7) { // Limitar a 7 caracteres (9999999)
+              setPrice(value);
+            }
+          }} 
           required
+          minLength={1} // Límite mínimo de 1 carácter
+          maxLength={7} // Límite máximo de 7 caracteres
         />
         <input 
           type="text" 

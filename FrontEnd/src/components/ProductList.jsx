@@ -16,9 +16,9 @@ function ProductList({ products, updateProductStatus, changeProductStatus }) {
               <p>Stock: {product.stock}</p>
               <p>Estado: 
                 <select value={product.status} onChange={(e) => changeProductStatus(index, e.target.value)}>
-                  <option value="pendiente">Pendiente</option>
-                  <option value="pagado">Pagado</option>
-                  <option value="cancelado">Cancelado</option>
+                  <option value="Agotado">Agotado</option>
+                  <option value="Disponible">Disponible</option>
+                  <option value="Cancelado">Cancelado</option>
                 </select>
               </p>
               <button 

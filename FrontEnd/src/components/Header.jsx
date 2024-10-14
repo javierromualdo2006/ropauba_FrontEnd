@@ -3,7 +3,10 @@ import React from 'react';
 function Header({ goToCreatePost, goToHomePage, goToLoginPage, user, onLogout }) {
   return (
     <header style={headerStyle}>
-      <h1 style={titleStyle} onClick={goToHomePage}>Ropauba</h1>
+      <h1 style={titleStyle} onClick={goToHomePage}>
+        <span style={ropaStyle}>Ropa</span>
+        <span style={ubaStyle}>UBA</span>
+      </h1>
       <div style={buttonContainerStyle}>
         <button style={buttonStyle} onClick={goToCreatePost}>Nueva Publicación</button>
         {user ? (
@@ -24,7 +27,7 @@ const headerStyle = {
   justifyContent: 'space-between',
   alignItems: 'center', // Alinear verticalmente en el centro
   padding: '10px',
-  backgroundColor: '#00BFFF', // Color celeste
+  background: 'linear-gradient(135deg, #00BFFF 50%, white 50%)', // Fondo diagonal: 50% celeste y 50% blanco
 };
 
 const buttonContainerStyle = {
@@ -33,8 +36,17 @@ const buttonContainerStyle = {
 };
 
 const titleStyle = {
-  color: 'white',
   cursor: 'pointer',
+  fontFamily: 'Impact, sans-serif', // Aplicar la fuente Impact
+  fontSize: '36px',
+};
+
+const ropaStyle = {
+  color: 'white', // Texto en blanco para "Ropa"
+};
+
+const ubaStyle = {
+  color: '#00ddff', // Texto celeste para "UBA"
 };
 
 const buttonStyle = {

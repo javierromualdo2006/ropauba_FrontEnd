@@ -1,9 +1,13 @@
+/* App.css */
+
 body {
-  font-family: 'Arial', sans-serif;
-  background-color: #00aaff; /* Fondo celeste */
+  font-family: 'Impact, sans-serif';
   margin: 0;
   padding: 0;
   color: #ffffff; /* Texto blanco */
+  background-image: url('https://resizer.glanacion.com/resizer/v2/el-colegio-de-lugano-que-depende-de-la-LUH2HGFRKVBTRLFKL5JJBMX2VY.jpg?auth=cc3a1a87a939ff1f85202d5283956f1bbe920bdde768a2b588a516cea3831b1d&width=780&height=439&quality=70&smart=true'); /* Imagen de fondo */
+  background-size: cover; /* Asegura que la imagen cubra todo el fondo */
+  background-position: center; /* Centra la imagen */
 }
 
 h3 {
@@ -15,5 +19,5 @@ button {
 }
 
 button:hover {
-  background-color: #cccccc; /* Botón con hover en gris claro */
+  background-color: #ec0909; /* Botón con hover en gris claro */
 }

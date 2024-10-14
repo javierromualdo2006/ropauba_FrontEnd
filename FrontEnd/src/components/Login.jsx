@@ -8,13 +8,13 @@ function Login({ onLogin, goToHomePage }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Verificación de credenciales (aquí podrías añadir la lógica real de autenticación)
-    if (username === 'admin' && password === '1234') { // Cambia 'usuario' y 'contraseña' por los valores reales
-      onLogin(username); // Llama a la función de inicio de sesión con el nombre de usuario
-      setErrorMessage(''); // Limpia el mensaje de error
-      goToHomePage(); // Redirigir a la página de inicio después del login
+    // Verificación de credenciales
+    if (username === 'admin' && password === '1234') { 
+      onLogin(username); 
+      setErrorMessage('');
+      goToHomePage(); 
     } else {
-      setErrorMessage('Credenciales incorrectas.'); // Muestra un mensaje de error
+      setErrorMessage('Credenciales incorrectas.');
     }
 
     // Limpiar los campos de entrada
@@ -49,12 +49,24 @@ function Login({ onLogin, goToHomePage }) {
 
 const loginContainerStyle = {
   padding: '20px',
+  height: '100vh', // Asegúrate de que el contenedor ocupe toda la altura de la ventana
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  backgroundImage: `url('https://resizer.glanacion.com/resizer/v2/el-colegio-de-lugano-que-depende-de-la-LUH2HGFRKVBTRLFKL5JJBMX2VY.jpg?auth=cc3a1a87a939ff1f85202d5283956f1bbe920bdde768a2b588a516cea3831b1d&width=780&height=439&quality=70&smart=true')`,
+  backgroundSize: 'cover', // Asegúrate de que la imagen cubra todo el fondo
+  backgroundPosition: 'center', // Centra la imagen
+  backgroundRepeat: 'no-repeat', // Evita que la imagen se repita
 };
 
 const loginFormStyle = {
   display: 'flex',
   flexDirection: 'column',
   gap: '10px',
+  backgroundColor: 'rgba(255, 255, 255, 0.8)', // Fondo blanco semi-transparente para el formulario
+  padding: '20px', // Espaciado interno del formulario
+  borderRadius: '10px', // Bordes redondeados
 };
 
 const loginButtonStyle = {

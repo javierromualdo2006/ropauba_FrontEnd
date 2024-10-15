@@ -1,17 +1,18 @@
 /* App.css */
 
+
+
 body {
-  font-family: 'Impact, sans-serif';
-  margin: 0;
-  padding: 0;
+  font-family: 'Impact', sans-serif;
   color: #ffffff; /* Texto blanco */
   background-image: url('https://resizer.glanacion.com/resizer/v2/el-colegio-de-lugano-que-depende-de-la-LUH2HGFRKVBTRLFKL5JJBMX2VY.jpg?auth=cc3a1a87a939ff1f85202d5283956f1bbe920bdde768a2b588a516cea3831b1d&width=780&height=439&quality=70&smart=true'); /* Imagen de fondo */
   background-size: cover; /* Asegura que la imagen cubra todo el fondo */
   background-position: center; /* Centra la imagen */
+  background-attachment: fixed; /* Mantiene la imagen de fondo fija al hacer scroll */
 }
 
 h3 {
-  margin: 0;
+  margin: 0; /* Asegura que no haya márgenes en h3 */
 }
 
 button {
@@ -20,4 +21,27 @@ button {
 
 button:hover {
   background-color: #ec0909; /* Botón con hover en gris claro */
+}
+
+/* Estilo adicional para el contenedor de la aplicación */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Asegura que el contenedor ocupe toda la altura */
+  margin: 0; /* Elimina márgenes en el contenedor */
+}
+
+/* Estilo para el contenido principal */
+.content {
+  flex-grow: 1; /* Permite que el contenido crezca para ocupar espacio */
+  padding: 20px; /* Padding para el contenido */
+  overflow-y: auto; /* Permite desplazamiento vertical */
+  margin: 0; /* Elimina márgenes en el contenido */
+}
+
+.no-products {
+  color: white;
+  text-align: center;
+  padding: 20px;
+  font-size: 18px;
 }

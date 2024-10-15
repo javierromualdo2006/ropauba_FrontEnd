@@ -1,17 +1,15 @@
-// App.jsx
-
 import React, { useState } from 'react';
 import Header from './components/Header';
 import ProductList from './components/ProductList';
 import CreatePost from './components/CreatePost';
 import Login from './components/Login';
-import WelcomeBox from './components/WelcomeBox'; // Asegúrate de importar el WelcomeBox
-import Footer from './components/Footer'; // Importar el componente Footer
+import WelcomeBox from './components/WelcomeBox';
+import Footer from './components/Footer'; 
 
 function App() {
-  const [currentPage, setCurrentPage] = useState('home'); // Página actual
-  const [products, setProducts] = useState([]); // Lista de productos
-  const [user, setUser] = useState(null); // Usuario autenticado
+  const [currentPage, setCurrentPage] = useState('home');
+  const [products, setProducts] = useState([]);
+  const [user, setUser] = useState(null);
 
   const renderPage = () => {
     switch (currentPage) {
@@ -22,14 +20,17 @@ function App() {
       case 'home':
       default:
         return (
-          <div style={backgroundStyle}>
+          <div style={contentStyle}>
             <WelcomeBox />
-            <ProductList 
-              products={products} 
-              updateProductStatus={updateProductStatus} 
-              changeProductStatus={changeProductStatus} 
-            />
-            <Footer /> {/* Añadir el Footer aquí */}
+            {products.length > 0 ? (
+              <ProductList 
+                products={products} 
+                updateProductStatus={updateProductStatus} 
+                changeProductStatus={changeProductStatus} 
+              />
+            ) : (
+              <div style={noProductsStyle}>No hay publicaciones todavía.</div> 
+            )}
           </div>
         );
     }
@@ -37,27 +38,23 @@ function App() {
 
   const goToCreatePost = () => setCurrentPage('create-post');
   const goToHomePage = () => setCurrentPage('home');
-  
   const goToLoginPage = () => setCurrentPage('login');
 
-  // Función para añadir un nuevo producto
   const addProduct = (product) => {
     setProducts((prevProducts) => [...prevProducts, product]);
     goToHomePage();
   };
 
-  // Función para actualizar el estado del producto y disminuir el stock
   const updateProductStatus = (index) => {
     setProducts((prevProducts) => {
       const updatedProducts = [...prevProducts];
       const product = updatedProducts[index];
 
       if (product.stock > 0) {
-        product.stock -= 1; // Reducir el stock en 1
-        product.status = 'pagado'; // Cambiar el estado a 'pagado'
+        product.stock -= 1;
+        product.status = 'pagado';
       }
 
-      // Si el stock llega a 0, cambiar el estado a 'cancelado'
       if (product.stock === 0) {
         product.status = 'cancelado';
       }
@@ -66,7 +63,6 @@ function App() {
     });
   };
 
-  // Función para cambiar el estado del producto manualmente
   const changeProductStatus = (index, newStatus) => {
     setProducts((prevProducts) => {
       const updatedProducts = [...prevProducts];
@@ -75,48 +71,60 @@ function App() {
     });
   };
 
-  // Función para iniciar sesión
   const handleLogin = (username) => {
     setUser(username);
-    goToHomePage(); // Redirigir a la página de inicio
+    goToHomePage();
   };
 
-  // Función para cerrar sesión
   const handleLogout = () => {
-    setUser(null); // Eliminar el usuario autenticado
-    goToHomePage(); // Redirigir a la página de inicio
+    setUser(null);
+    goToHomePage();
   };
 
   return (
-    <div style={appContainerStyle}> {/* Añadir estilo para el contenedor principal */}
+    <div style={appContainerStyle}>
       <Header 
         goToCreatePost={goToCreatePost} 
         goToHomePage={goToHomePage} 
-        goToLoginPage={goToLoginPage} // Añadir función para ir a login
-        user={user} // Pasamos el usuario autenticado
-        onLogout={handleLogout} // Pasar función de logout
+        goToLoginPage={goToLoginPage} 
+        user={user} 
+        onLogout={handleLogout} 
       />
-      {user && <h2>Bienvenido, {user}!</h2>} {/* Mensaje de bienvenida */}
+      {user && <h2>Bienvenido, {user}!</h2>}
       {renderPage()}
+      <Footer /> {/* Asegúrate de que el Footer esté aquí */}
     </div>
   );
 }
 
-// Estilo para el fondo del contenedor
-const backgroundStyle = {
-  backgroundImage: 'url(https://resizer.glanacion.com/resizer/v2/el-colegio-de-lugano-que-depende-de-la-LUH2HGFRKVBTRLFKL5JJBMX2VY.jpg?auth=cc3a1a87a939ff1f85202d5283956f1bbe920bdde768a2b588a516cea3831b1d&width=780&height=439&quality=70&smart=true)', // Imagen de fondo
-  backgroundSize: 'cover', // Asegura que la imagen cubra todo el fondo
-  backgroundPosition: 'center', // Centra la imagen de fondo
-  padding: '20px', // Espacio alrededor del contenido
-  minHeight: 'calc(100vh - 60px)', // Asegura que el contenedor tenga al menos la altura de la ventana menos el footer
-  color: '#ffffff', // Color del texto por defecto
+// Estilo para el mensaje cuando no hay productos
+const noProductsStyle = {
+  color: 'white',
+  textAlign: 'center',
+  padding: '20px',
+  fontSize: '18px',
 };
 
 // Estilo para el contenedor principal
 const appContainerStyle = {
   display: 'flex',
-  flexDirection: 'column', // Colocar todos los elementos en columna
-  minHeight: '100vh', // Asegura que el contenedor tenga al menos la altura de la ventana
+  flexDirection: 'column',  
+  width: '100%',
+  overflow: 'hidden', // Evita que los elementos se desborden
+};
+
+// Estilo para el contenido de la página (imagen de fondo y productos)
+const contentStyle = {
+  backgroundImage: 'url(https://resizer.glanacion.com/resizer/v2/el-colegio-de-lugano-que-depende-de-la-LUH2HGFRKVBTRLFKL5JJBMX2VY.jpg?auth=cc3a1a87a939ff1f85202d5283956f1bbe920bdde768a2b588a516cea3831b1d&width=780&height=439&quality=70&smart=true)',
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
+  backgroundAttachment: 'fixed', // Mantiene la imagen fija
+  padding: '20px',
+  flexGrow: 1, // Permite que el contenido crezca y empuje el footer hacia abajo
+  color: '#ffffff',
+  margin: 0,
+  boxSizing: 'border-box', // Asegura que el padding no cause desbordamiento
+  overflowY: 'auto', // Permite el desplazamiento vertical
 };
 
 export default App;

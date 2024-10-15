@@ -11,6 +11,29 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* Establecer valores para el ancho mínimo y máximo */
+  min-width: 100vw; /* Ocupa el 100% del ancho de la ventana */
+  max-width: 100vw; /* Evita que se estire más allá del ancho de la ventana */
+}
+
+* {
+  margin: 0; /* Elimina márgenes de todos los elementos */
+  padding: 0; /* Elimina paddings de todos los elementos */
+  box-sizing: border-box; /* Incluye padding y borde en el ancho y alto */
+}
+
+/* Asegúrate de que body tenga 100% de ancho y alto */
+html, body {
+  height: 100%; /* Asegura que el body ocupe toda la altura */
+  width: 100%; /* Asegura que el body ocupe todo el ancho */
+  margin: 0; /* Elimina márgenes */
+  padding: 0; /* Elimina padding */
+}
+
+#root {
+  height: 100%;
+  width: 100%; 
 }
 
 a {
@@ -25,14 +48,17 @@ a:hover {
 body {
   margin: 0;
   display: flex;
-  place-items: center;
+  flex-direction: column; /* Asegura que los elementos se apilen en columna */
   min-width: 320px;
   min-height: 100vh;
+  background-image: url('https://resizer.glanacion.com/resizer/v2/el-colegio-de-lugano-que-depende-de-la-LUH2HGFRKVBTRLFKL5JJBMX2VY.jpg?auth=cc3a1a87a939ff1f85202d5283956f1bbe920bdde768a2b588a516cea3831b1d&width=780&height=439&quality=70&smart=true'); /* Imagen de fondo */
+  background-size: cover; /* Asegura que la imagen cubra todo el fondo */
+  background-position: center; /* Centra la imagen */
+  background-attachment: fixed; /* Mantiene la imagen de fondo fija al hacer scroll */
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+h1, h2, h3 {
+  margin: 0; /* Asegura que no haya márgenes en los títulos */
 }
 
 button {
@@ -65,4 +91,11 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+/* Estilo adicional para asegurar que el contenido ocupe el espacio adecuado */
+.content {
+  flex-grow: 1; /* Permite que el contenido crezca para ocupar espacio */
+  padding: 20px; /* Espaciado para el contenido */
+  overflow-y: auto; /* Permite desplazamiento vertical */
 }

@@ -35,7 +35,7 @@ function Product({ product }) {
 }
 
 const productStyle = {
-  border: '1px solid #ffffff',
+  border: '1px solid #00000',
   borderRadius: '10px',
   padding: '15px',
   backgroundColor: '#0088cc',

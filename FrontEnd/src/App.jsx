@@ -4,12 +4,13 @@ import ProductList from './components/ProductList';
 import CreatePost from './components/CreatePost';
 import Login from './components/Login';
 import WelcomeBox from './components/WelcomeBox';
-import Footer from './components/Footer'; 
+import Footer from './components/Footer';
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
   const [products, setProducts] = useState([]);
   const [user, setUser] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const renderPage = () => {
     switch (currentPage) {
@@ -26,7 +27,9 @@ function App() {
               <ProductList 
                 products={products} 
                 updateProductStatus={updateProductStatus} 
-                changeProductStatus={changeProductStatus} 
+                deleteProduct={deleteProduct} 
+                searchTerm={searchTerm} 
+                user={user} // Pasar el usuario al componente
               />
             ) : (
               <div style={noProductsStyle}>No hay publicaciones todavía.</div> 
@@ -63,12 +66,10 @@ function App() {
     });
   };
 
-  const changeProductStatus = (index, newStatus) => {
-    setProducts((prevProducts) => {
-      const updatedProducts = [...prevProducts];
-      updatedProducts[index].status = newStatus;
-      return updatedProducts;
-    });
+  const deleteProduct = (index) => {
+    if (index >= 0 && index < products.length) {
+      setProducts((prevProducts) => prevProducts.filter((_, i) => i !== index));
+    }
   };
 
   const handleLogin = (username) => {
@@ -81,6 +82,10 @@ function App() {
     goToHomePage();
   };
 
+  const handleSearch = (term) => {
+    setSearchTerm(term);
+  };
+
   return (
     <div style={appContainerStyle}>
       <Header 
@@ -89,15 +94,15 @@ function App() {
         goToLoginPage={goToLoginPage} 
         user={user} 
         onLogout={handleLogout} 
+        onSearch={handleSearch} 
       />
-      {user && <h2>Bienvenido, {user}!</h2>}
       {renderPage()}
-      <Footer /> {/* Asegúrate de que el Footer esté aquí */}
+      <Footer />
     </div>
   );
 }
 
-// Estilo para el mensaje cuando no hay productos
+// Estilos
 const noProductsStyle = {
   color: 'white',
   textAlign: 'center',
@@ -105,26 +110,24 @@ const noProductsStyle = {
   fontSize: '18px',
 };
 
-// Estilo para el contenedor principal
 const appContainerStyle = {
   display: 'flex',
   flexDirection: 'column',  
   width: '100%',
-  overflow: 'hidden', // Evita que los elementos se desborden
+  overflow: 'hidden',
 };
 
-// Estilo para el contenido de la página (imagen de fondo y productos)
 const contentStyle = {
   backgroundImage: 'url(https://resizer.glanacion.com/resizer/v2/el-colegio-de-lugano-que-depende-de-la-LUH2HGFRKVBTRLFKL5JJBMX2VY.jpg?auth=cc3a1a87a939ff1f85202d5283956f1bbe920bdde768a2b588a516cea3831b1d&width=780&height=439&quality=70&smart=true)',
   backgroundSize: 'cover',
   backgroundPosition: 'center',
-  backgroundAttachment: 'fixed', // Mantiene la imagen fija
+  backgroundAttachment: 'fixed',
   padding: '20px',
-  flexGrow: 1, // Permite que el contenido crezca y empuje el footer hacia abajo
+  flexGrow: 1,
   color: '#ffffff',
   margin: 0,
-  boxSizing: 'border-box', // Asegura que el padding no cause desbordamiento
-  overflowY: 'auto', // Permite el desplazamiento vertical
+  boxSizing: 'border-box',
+  overflowY: 'auto',
 };
 
 export default App;

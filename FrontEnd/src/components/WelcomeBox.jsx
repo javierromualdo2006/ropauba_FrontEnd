@@ -2,6 +2,8 @@
 
 import React from 'react';
 
+
+
 const WelcomeBox = () => {
   return (
     <div style={boxStyle}>
@@ -40,5 +42,6 @@ const highlightStyle = {
 const highlightColor = {
   color: '#00ddff', // Color azul claro
 };
+
 
 export default WelcomeBox;

@@ -7,7 +7,7 @@ function Login({ onLogin, goToHomePage }) {
     firstName: '',
     lastName: '',
     username: '',
-    phone: '', // Cambiar a 'phone' para que coincida
+    phone: '', 
     password: '',
     confirmPassword: ''
   });

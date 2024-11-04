@@ -1,47 +1,60 @@
-import React, { useState } from 'react';
-import Header from './components/Header';
-import ProductList from './components/ProductList';
-import CreatePost from './components/CreatePost';
-import Login from './components/Login';
-import WelcomeBox from './components/WelcomeBox';
-import Footer from './components/Footer';
+import React, { useEffect, useState } from "react";
+import Header from "./components/Header";
+import ProductList from "./components/ProductList";
+import CreatePost from "./components/CreatePost";
+import Login from "./components/Login";
+import WelcomeBox from "./components/WelcomeBox";
+import Footer from "./components/Footer";
 
 function App() {
-  const [currentPage, setCurrentPage] = useState('home');
+  const [currentPage, setCurrentPage] = useState("home");
   const [products, setProducts] = useState([]);
   const [user, setUser] = useState(null);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [newProducts, setNewProducts] = useState([]);
+
+  useEffect(() => {
+    fetch("http://127.0.0.1:5000/publicaciones")
+      .then((response) => response.json())
+      .then((data) => setNewProducts(data.data))
+      .catch((error) =>
+        console.error("Error fetching publication IDs:", error)
+      );
+  }, []);
 
   const renderPage = () => {
     switch (currentPage) {
-      case 'create-post':
-        return <CreatePost addProduct={addProduct} goToHomePage={goToHomePage} />;
-      case 'login':
+      case "create-post":
+        return (
+          <CreatePost addProduct={addProduct} goToHomePage={goToHomePage} />
+        );
+      case "login":
         return <Login onLogin={handleLogin} goToHomePage={goToHomePage} />;
-      case 'home':
+      case "home":
       default:
         return (
           <div style={contentStyle}>
             <WelcomeBox />
-            {products.length > 0 ? (
-              <ProductList 
-                products={products} 
-                updateProductStatus={updateProductStatus} 
-                deleteProduct={deleteProduct} 
-                searchTerm={searchTerm} 
+            {newProducts.length > 0 ? (
+              <ProductList
+                products={products}
+                newProducts={newProducts} //props
+                updateProductStatus={updateProductStatus}
+                deleteProduct={deleteProduct}
+                searchTerm={searchTerm}
                 user={user} // Pasar el usuario al componente
               />
             ) : (
-              <div style={noProductsStyle}>No hay publicaciones todavía.</div> 
+              <div style={noProductsStyle}>No hay .</div>
             )}
           </div>
         );
     }
   };
 
-  const goToCreatePost = () => setCurrentPage('create-post');
-  const goToHomePage = () => setCurrentPage('home');
-  const goToLoginPage = () => setCurrentPage('login');
+  const goToCreatePost = () => setCurrentPage("create-post");
+  const goToHomePage = () => setCurrentPage("home");
+  const goToLoginPage = () => setCurrentPage("login");
 
   const addProduct = (product) => {
     setProducts((prevProducts) => [...prevProducts, product]);
@@ -55,11 +68,11 @@ function App() {
 
       if (product.stock > 0) {
         product.stock -= 1;
-        product.status = 'pagado';
+        product.status = "pagado";
       }
 
       if (product.stock === 0) {
-        product.status = 'cancelado';
+        product.status = "cancelado";
       }
 
       return updatedProducts;
@@ -88,13 +101,13 @@ function App() {
 
   return (
     <div style={appContainerStyle}>
-      <Header 
-        goToCreatePost={goToCreatePost} 
-        goToHomePage={goToHomePage} 
-        goToLoginPage={goToLoginPage} 
-        user={user} 
-        onLogout={handleLogout} 
-        onSearch={handleSearch} 
+      <Header
+        goToCreatePost={goToCreatePost}
+        goToHomePage={goToHomePage}
+        goToLoginPage={goToLoginPage}
+        user={user}
+        onLogout={handleLogout}
+        onSearch={handleSearch}
       />
       {renderPage()}
       <Footer />
@@ -104,30 +117,31 @@ function App() {
 
 // Estilos
 const noProductsStyle = {
-  color: 'white',
-  textAlign: 'center',
-  padding: '20px',
-  fontSize: '18px',
+  color: "white",
+  textAlign: "center",
+  padding: "20px",
+  fontSize: "18px",
 };
 
 const appContainerStyle = {
-  display: 'flex',
-  flexDirection: 'column',  
-  width: '100%',
-  overflow: 'hidden',
+  display: "flex",
+  flexDirection: "column",
+  width: "100%",
+  overflow: "hidden",
 };
 
 const contentStyle = {
-  backgroundImage: 'url(https://resizer.glanacion.com/resizer/v2/el-colegio-de-lugano-que-depende-de-la-LUH2HGFRKVBTRLFKL5JJBMX2VY.jpg?auth=cc3a1a87a939ff1f85202d5283956f1bbe920bdde768a2b588a516cea3831b1d&width=780&height=439&quality=70&smart=true)',
-  backgroundSize: 'cover',
-  backgroundPosition: 'center',
-  backgroundAttachment: 'fixed',
-  padding: '20px',
+  backgroundImage:
+    "url(https://resizer.glanacion.com/resizer/v2/el-colegio-de-lugano-que-depende-de-la-LUH2HGFRKVBTRLFKL5JJBMX2VY.jpg?auth=cc3a1a87a939ff1f85202d5283956f1bbe920bdde768a2b588a516cea3831b1d&width=780&height=439&quality=70&smart=true)",
+  backgroundSize: "cover",
+  backgroundPosition: "center",
+  backgroundAttachment: "fixed",
+  padding: "20px",
   flexGrow: 1,
-  color: '#ffffff',
+  color: "#ffffff",
   margin: 0,
-  boxSizing: 'border-box',
-  overflowY: 'auto',
+  boxSizing: "border-box",
+  overflowY: "auto",
 };
 
 export default App;

@@ -1,18 +1,32 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from "react";
 
-function ProductList({ products, updateProductStatus, deleteProduct, searchTerm, user }) {
+function ProductList({
+  products,
+  newProducts,
+  updateProductStatus,
+  deleteProduct,
+  searchTerm,
+  user,
+}) {
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 12;
 
   // Filtrar productos según el término de búsqueda
-  const filteredProducts = products.filter(product =>
+  const filteredProducts = products.filter((product) =>
     product.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const filteredNewProducts = newProducts.filter((product) =>
+    product.Titulo.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Calcular los índices de los productos a mostrar en la página actual
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+  const currentProducts = filteredProducts.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct
+  );
 
   // Calcular el número total de páginas
   const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
@@ -24,38 +38,49 @@ function ProductList({ products, updateProductStatus, deleteProduct, searchTerm,
 
   // Manejar la eliminación de producto
   const handleDeleteProduct = (index) => {
-    const confirmation = window.confirm("¿Estás seguro de que deseas eliminar este producto?");
+    const confirmation = window.confirm(
+      "¿Estás seguro de que deseas eliminar este producto?"
+    );
     if (confirmation) {
       deleteProduct(index);
     }
   };
 
+  useEffect(() => {
+    console.log(newProducts);
+  }, [newProducts]);
+
   return (
     <div>
       <div style={productListStyle}>
-        {currentProducts.length === 0 ? (
-          <p>No hay productos disponibles.</p>
+        {!newProducts ? (
+          <p>No hay nuevos productos disponibles.</p>
         ) : (
-          currentProducts.map((product, index) => (
+          newProducts.map((product, index) => (
             <div key={index} style={productCardStyle}>
-              <img src={product.image} alt={product.title} style={imageStyle} />
+              <img
+                src={product.Imagen}
+                alt={product.Titulo}
+                style={imageStyle}
+              />
               <div style={infoStyle}>
-                <h3 style={titleStyle}>{product.title}</h3>
-                <ProductDescription description={product.description} />
-                <p style={priceStyle}>Precio: ${product.price}</p>
-                <p style={stockStyle}>Stock: {product.stock}</p>
-                <p style={statusStyle}>Estado: {product.stock > 0 ? 'Disponible' : 'Agotado'}</p>
+                <h3 style={titleStyle}>{product.Titulo}</h3>
+                <ProductDescription description={product.Descripcion} />
+                <p style={priceStyle}>Precio: ${product.Precio}</p>
+                <p style={stockStyle}>Stock: {product.Stock}</p>
+                <p style={statusStyle}>
+                  Estado: {product.Stock > 0 ? "Disponible" : "Agotado"}
+                </p>
                 <div style={buttonContainerStyle}>
-                  <button 
+                  <button
                     style={buttonStyle}
-                    onClick={() => updateProductStatus(index)} 
-                    disabled={product.stock <= 0}
+                    onClick={() => updateProductStatus(index)}
+                    disabled={product.Stock <= 0}
                   >
                     Comprar
                   </button>
-                  {/* Mostrar botón de eliminar solo si hay un usuario autenticado */}
                   {user && (
-                    <button 
+                    <button
                       style={deleteButtonStyle}
                       onClick={() => handleDeleteProduct(index)}
                     >
@@ -72,29 +97,36 @@ function ProductList({ products, updateProductStatus, deleteProduct, searchTerm,
       {/* Contenedor de paginación */}
       <div style={paginationStyle}>
         <button
-          onClick={() => handlePageChange(currentPage > 1 ? currentPage - 1 : 1)}
+          onClick={() =>
+            handlePageChange(currentPage > 1 ? currentPage - 1 : 1)
+          }
           style={paginationButtonStyle}
           disabled={currentPage === 1}
         >
           Anterior
         </button>
-        
+
         {Array.from({ length: totalPages }, (_, index) => (
           <button
             key={index + 1}
             onClick={() => handlePageChange(index + 1)}
             style={{
               ...pageButtonStyle,
-              backgroundColor: currentPage === index + 1 ? '#00BFFF' : '#ffffff',
-              color: currentPage === index + 1 ? '#ffffff' : '#00BFFF',
+              backgroundColor:
+                currentPage === index + 1 ? "#00BFFF" : "#ffffff",
+              color: currentPage === index + 1 ? "#ffffff" : "#00BFFF",
             }}
           >
             {index + 1}
           </button>
         ))}
-        
+
         <button
-          onClick={() => handlePageChange(currentPage < totalPages ? currentPage + 1 : totalPages)}
+          onClick={() =>
+            handlePageChange(
+              currentPage < totalPages ? currentPage + 1 : totalPages
+            )
+          }
           style={paginationButtonStyle}
           disabled={currentPage === totalPages}
         >
@@ -114,20 +146,18 @@ function ProductDescription({ description }) {
 
   return (
     <div>
-      <div 
+      <div
         style={{
           ...descriptionContainerStyle,
-          maxHeight: isExpanded ? '50px' : '25px'
+          maxHeight: isExpanded ? "50px" : "25px",
         }}
       >
-        <p style={descriptionStyle}>
-          {description}
-        </p>
+        <p style={descriptionStyle}>{description}</p>
       </div>
 
       {description.length > 25 && (
         <button onClick={toggleDescription} style={toggleButtonStyle}>
-          {isExpanded ? 'Ver menos' : 'Ver más'}
+          {isExpanded ? "Ver menos" : "Ver más"}
         </button>
       )}
     </div>
@@ -136,135 +166,135 @@ function ProductDescription({ description }) {
 
 // Estilos (sin cambios)
 const productListStyle = {
-  display: 'grid',
-  gridTemplateColumns: 'repeat(3, 1fr)',
-  gap: '20px',
-  padding: '20px',
+  display: "grid",
+  gridTemplateColumns: "repeat(3, 1fr)",
+  gap: "20px",
+  padding: "20px",
 };
 
 const productCardStyle = {
-  display: 'flex',
-  flexDirection: 'column',
-  border: '1px solid #00BFFF',
-  padding: '10px',
-  borderRadius: '5px',
-  backgroundColor: '#fff',
-  alignItems: 'center',
-  justifyContent: 'space-between',
+  display: "flex",
+  flexDirection: "column",
+  border: "1px solid #00BFFF",
+  padding: "10px",
+  borderRadius: "5px",
+  backgroundColor: "#fff",
+  alignItems: "center",
+  justifyContent: "space-between",
 };
 
 const imageStyle = {
-  width: '120px',
-  height: '120px',
-  marginBottom: '10px',
+  width: "120px",
+  height: "120px",
+  marginBottom: "10px",
 };
 
 const infoStyle = {
-  display: 'flex',
-  flexDirection: 'column',
-  fontSize: '14px',
-  textAlign: 'center',
-  fontFamily: 'Impact, sans-serif',
-  color: '#000000',
+  display: "flex",
+  flexDirection: "column",
+  fontSize: "14px",
+  textAlign: "center",
+  fontFamily: "Impact, sans-serif",
+  color: "#000000",
 };
 
 const titleStyle = {
-  fontFamily: 'Impact, sans-serif',
-  color: '#000000',
+  fontFamily: "Impact, sans-serif",
+  color: "#000000",
 };
 
 const priceStyle = {
-  fontFamily: 'Impact, sans-serif',
-  color: '#000000',
+  fontFamily: "Impact, sans-serif",
+  color: "#000000",
 };
 
 const stockStyle = {
-  fontFamily: 'Impact, sans-serif',
-  color: '#000000',
+  fontFamily: "Impact, sans-serif",
+  color: "#000000",
 };
 
 const statusStyle = {
-  fontFamily: 'Impact, sans-serif',
-  color: '#000000',
+  fontFamily: "Impact, sans-serif",
+  color: "#000000",
 };
 
 const buttonStyle = {
-  backgroundColor: '#00BFFF',
-  color: '#ffffff',
-  padding: '5px',
-  border: 'none',
-  cursor: 'pointer',
-  fontSize: '12px',
+  backgroundColor: "#00BFFF",
+  color: "#ffffff",
+  padding: "5px",
+  border: "none",
+  cursor: "pointer",
+  fontSize: "12px",
 };
 
 const deleteButtonStyle = {
-  backgroundColor: '#ff4d4d',
-  color: '#ffffff',
-  padding: '5px',
-  border: 'none',
-  cursor: 'pointer',
-  fontSize: '12px',
-  marginLeft: '5px',
+  backgroundColor: "#ff4d4d",
+  color: "#ffffff",
+  padding: "5px",
+  border: "none",
+  cursor: "pointer",
+  fontSize: "12px",
+  marginLeft: "5px",
 };
 
 const buttonContainerStyle = {
-  display: 'flex',
-  justifyContent: 'space-between',
-  width: '100%',
+  display: "flex",
+  justifyContent: "space-between",
+  width: "100%",
 };
 
 const toggleButtonStyle = {
-  backgroundColor: '#00BFFF',
-  color: '#ffffff',
-  border: 'none',
-  borderRadius: '20px',
-  cursor: 'pointer',
-  fontSize: '14px',
-  padding: '5px 10px',
-  marginTop: '5px',
+  backgroundColor: "#00BFFF",
+  color: "#ffffff",
+  border: "none",
+  borderRadius: "20px",
+  cursor: "pointer",
+  fontSize: "14px",
+  padding: "5px 10px",
+  marginTop: "5px",
 };
 
 const descriptionContainerStyle = {
-  overflowY: 'auto',
-  transition: 'max-height 0.3s ease',
-  maxHeight: '25px',
+  overflowY: "auto",
+  transition: "max-height 0.3s ease",
+  maxHeight: "25px",
 };
 
 const descriptionStyle = {
-  fontSize: '14px',
-  margin: '10px 0',
-  fontFamily: 'Impact, sans-serif',
-  color: '#000000',
-  whiteSpace: 'normal',
-  wordWrap: 'break-word',
+  fontSize: "14px",
+  margin: "10px 0",
+  fontFamily: "Impact, sans-serif",
+  color: "#000000",
+  whiteSpace: "normal",
+  wordWrap: "break-word",
 };
 
 const paginationStyle = {
-  display: 'flex',
-  justifyContent: 'center',
-  marginTop: '20px',
+  display: "flex",
+  justifyContent: "center",
+  marginTop: "20px",
 };
 
 const paginationButtonStyle = {
-  padding: '10px 20px',
-  margin: '0 5px',
-  border: 'none',
-  borderRadius: '5px',
-  cursor: 'pointer',
-  fontSize: '14px',
-  backgroundColor: '#00BFFF',
-  color: '#ffffff',
+  padding: "10px 20px",
+  margin: "0 5px",
+  border: "none",
+  borderRadius: "5px",
+  cursor: "pointer",
+  fontSize: "14px",
+  backgroundColor: "#00BFFF",
+  color: "#ffffff",
 };
 
 const pageButtonStyle = {
-  padding: '10px',
-  margin: '0 5px',
-  border: 'none',
-  borderRadius: '5px',
-  cursor: 'pointer',
-  fontSize: '14px',
-  backgroundColor: '#ffffff',
-  color: '#00BFFF',
+  padding: "10px",
+  margin: "0 5px",
+  border: "none",
+  borderRadius: "5px",
+  cursor: "pointer",
+  fontSize: "14px",
+  backgroundColor: "#ffffff",
+  color: "#00BFFF",
 };
 
 export default ProductList;

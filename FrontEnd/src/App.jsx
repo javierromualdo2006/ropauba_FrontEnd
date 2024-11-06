@@ -14,14 +14,15 @@ function App() {
   const [newProducts, setNewProducts] = useState([]);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:5000/publicaciones")
+    fetch("http://127.0.0.1:5000/vista_publicaciones")
       .then((response) => response.json())
-      .then((data) => setNewProducts(data.data))
+      .then((data) => setNewProducts(data))
       .catch((error) =>
         console.error("Error fetching publication IDs:", error)
       );
   }, []);
 
+  // Función para renderizar las páginas
   const renderPage = () => {
     switch (currentPage) {
       case "create-post":
@@ -35,7 +36,7 @@ function App() {
         return (
           <div style={contentStyle}>
             <WelcomeBox />
-            {newProducts.length > 0 ? (
+            {newProducts ? (
               <ProductList
                 products={products}
                 newProducts={newProducts} //props
@@ -45,22 +46,25 @@ function App() {
                 user={user} // Pasar el usuario al componente
               />
             ) : (
-              <div style={noProductsStyle}>No hay .</div>
+              <div style={noProductsStyle}>No hay productos.</div>
             )}
           </div>
         );
     }
   };
 
-  const goToCreatePost = () => setCurrentPage("create-post");
+  // Funciones de navegación
   const goToHomePage = () => setCurrentPage("home");
+  const goToCreatePost = () => setCurrentPage("create-post");
   const goToLoginPage = () => setCurrentPage("login");
 
+  // Función para agregar productos
   const addProduct = (product) => {
     setProducts((prevProducts) => [...prevProducts, product]);
     goToHomePage();
   };
 
+  // Función para actualizar el estado del producto
   const updateProductStatus = (index) => {
     setProducts((prevProducts) => {
       const updatedProducts = [...prevProducts];
@@ -79,12 +83,14 @@ function App() {
     });
   };
 
+  // Función para eliminar productos
   const deleteProduct = (index) => {
     if (index >= 0 && index < products.length) {
       setProducts((prevProducts) => prevProducts.filter((_, i) => i !== index));
     }
   };
 
+  // Funciones de login y logout
   const handleLogin = (username) => {
     setUser(username);
     goToHomePage();
@@ -95,6 +101,7 @@ function App() {
     goToHomePage();
   };
 
+  // Función de búsqueda
   const handleSearch = (term) => {
     setSearchTerm(term);
   };

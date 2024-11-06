@@ -11,32 +11,28 @@ function ProductList({
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 12;
 
-  // Filtrar productos según el término de búsqueda
-  const filteredProducts = products.filter((product) =>
-    product.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
+  // Filtrar los productos basados en el searchTerm
   const filteredNewProducts = newProducts.filter((product) =>
-    product.Titulo.toLowerCase().includes(searchTerm.toLowerCase())
+    product.titulo.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Calcular los índices de los productos a mostrar en la página actual
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = filteredProducts.slice(
+  const currentProducts = filteredNewProducts.slice(
     indexOfFirstProduct,
     indexOfLastProduct
   );
 
   // Calcular el número total de páginas
-  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+  const totalPages = Math.ceil(filteredNewProducts.length / productsPerPage);
 
   // Manejar el cambio de página
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
-  // Manejar la eliminación de producto
+  // Manejar el borrado de productos
   const handleDeleteProduct = (index) => {
     const confirmation = window.confirm(
       "¿Estás seguro de que deseas eliminar este producto?"
@@ -53,10 +49,10 @@ function ProductList({
   return (
     <div>
       <div style={productListStyle}>
-        {!newProducts ? (
-          <p>No hay nuevos productos disponibles.</p>
+        {filteredNewProducts.length === 0 ? (
+          <p>No hay productos disponibles.</p>
         ) : (
-          newProducts.map((product, index) => (
+          currentProducts.map((product, index) => (
             <div key={index} style={productCardStyle}>
               <img
                 src={product.Imagen}
@@ -65,7 +61,7 @@ function ProductList({
               />
               <div style={infoStyle}>
                 <h3 style={titleStyle}>{product.Titulo}</h3>
-                <ProductDescription description={product.Descripcion} />
+                <ProductDescription description={product.descripcion} />
                 <p style={priceStyle}>Precio: ${product.Precio}</p>
                 <p style={stockStyle}>Stock: {product.Stock}</p>
                 <p style={statusStyle}>

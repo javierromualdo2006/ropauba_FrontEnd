@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 
+// Asegúrate de pasarle la función deleteProduct desde el componente padre
 function ProductList({
-  products,
   newProducts,
-  updateProductStatus,
   deleteProduct,
   searchTerm,
   user,
@@ -33,18 +32,14 @@ function ProductList({
   };
 
   // Manejar el borrado de productos
-  const handleDeleteProduct = (index) => {
+  const handleDeleteProduct = (id) => {
     const confirmation = window.confirm(
       "¿Estás seguro de que deseas eliminar este producto?"
     );
     if (confirmation) {
-      deleteProduct(index);
+      deleteProduct(id);
     }
   };
-
-  useEffect(() => {
-    console.log(newProducts);
-  }, [newProducts]);
 
   return (
     <div>
@@ -53,12 +48,8 @@ function ProductList({
           <p>No hay productos disponibles.</p>
         ) : (
           currentProducts.map((product, index) => (
-            <div key={index} style={productCardStyle}>
-              <img
-                src={product.Imagen}
-                alt={product.Titulo}
-                style={imageStyle}
-              />
+            <div key={product.id || index} style={productCardStyle}>
+              <img src={product.Imagen} alt={product.Titulo} style={imageStyle} />
               <div style={infoStyle}>
                 <h3 style={titleStyle}>{product.Titulo}</h3>
                 <ProductDescription description={product.descripcion} />
@@ -68,17 +59,13 @@ function ProductList({
                   Estado: {product.Stock > 0 ? "Disponible" : "Agotado"}
                 </p>
                 <div style={buttonContainerStyle}>
-                  <button
-                    style={buttonStyle}
-                    onClick={() => updateProductStatus(index)}
-                    disabled={product.Stock <= 0}
-                  >
+                  <button style={buttonStyle} disabled={product.Stock <= 0}>
                     Comprar
                   </button>
                   {user && (
                     <button
                       style={deleteButtonStyle}
-                      onClick={() => handleDeleteProduct(index)}
+                      onClick={() => handleDeleteProduct(product.id)}
                     >
                       Eliminar
                     </button>
@@ -87,6 +74,7 @@ function ProductList({
               </div>
             </div>
           ))
+          
         )}
       </div>
 
@@ -160,7 +148,6 @@ function ProductDescription({ description }) {
   );
 }
 
-// Estilos (sin cambios)
 const productListStyle = {
   display: "grid",
   gridTemplateColumns: "repeat(3, 1fr)",
@@ -293,4 +280,41 @@ const pageButtonStyle = {
   color: "#00BFFF",
 };
 
+function deleteProduct(id) {
+  const userId = localStorage.getItem("user_id");
+
+  if (!userId) {
+    alert("Se requiere autenticación.");
+    return;
+  }
+
+  fetch(`http://localhost:5000/publicaciones/${id}`, {
+    method: "DELETE",
+    headers: {
+      "User-Id": userId,
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("No se pudo eliminar la publicación");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      alert(data.mensaje); // Mostrar mensaje de éxito o error
+
+      // Aquí actualizamos el estado para eliminar el producto de la lista en el frontend
+      setNewProducts((prevProducts) =>
+        prevProducts.filter((product) => product.id !== id)
+      );
+    })
+    .catch((error) => {
+      console.error("Error al eliminar el producto:", error);
+      alert("Hubo un error al eliminar el producto");
+    });
+}
+
+
+
 export default ProductList;
+

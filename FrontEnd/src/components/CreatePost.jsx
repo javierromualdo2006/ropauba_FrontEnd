@@ -60,7 +60,6 @@ function CreatePost({ addProduct, goToHomePage, postId }) {
           titulo: title,
           descripcion: description,
           id_producto: 1,  // Asegúrate de enviar el id_producto correcto
-          id_usuario: 1,   // Asegúrate de enviar el id_usuario correcto
           imagen: image
         }),
       });
@@ -86,7 +85,6 @@ function CreatePost({ addProduct, goToHomePage, postId }) {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
-          'user_id': '1',  // Aquí deberías pasar el ID del usuario logueado
         },
       });
 

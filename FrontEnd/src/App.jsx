@@ -6,7 +6,7 @@ import Login from "./components/Login";
 import WelcomeBox from "./components/WelcomeBox";
 import Footer from "./components/Footer";
 
-function App() {
+const App = () => {
   const [currentPage, setCurrentPage] = useState("home");
   const [products, setProducts] = useState([]);
   const [user, setUser] = useState(null);
@@ -14,36 +14,47 @@ function App() {
   const [newProducts, setNewProducts] = useState([]);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:5000/vista_publicaciones")
-      .then((response) => response.json())
-      .then((data) => setNewProducts(data))
-      .catch((error) =>
-        console.error("Error fetching publication IDs:", error)
-      );
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch("http://127.0.0.1:5000/vista_publicaciones");
+        const data = await response.json();
+        setNewProducts(data);
+      } catch (error) {
+        console.error("Error fetching publication IDs:", error);
+      }
+    };
+    fetchProducts();
   }, []);
 
-  // Función para renderizar las páginas
   const renderPage = () => {
     switch (currentPage) {
       case "create-post":
         return (
-          <CreatePost addProduct={addProduct} goToHomePage={goToHomePage} />
+          <CreatePost
+            addProduct={addProduct}
+            goToHomePage={goToHomePage}
+          />
         );
       case "login":
-        return <Login onLogin={handleLogin} goToHomePage={goToHomePage} />;
+        return (
+          <Login
+            onLogin={handleLogin}
+            goToHomePage={goToHomePage}
+          />
+        );
       case "home":
       default:
         return (
           <div style={contentStyle}>
             <WelcomeBox />
-            {newProducts ? (
+            {newProducts.length > 0 ? (
               <ProductList
                 products={products}
-                newProducts={newProducts} //props
+                newProducts={newProducts}
                 updateProductStatus={updateProductStatus}
                 deleteProduct={deleteProduct}
                 searchTerm={searchTerm}
-                user={user} // Pasar el usuario al componente
+                user={user}
               />
             ) : (
               <div style={noProductsStyle}>No hay productos.</div>
@@ -53,18 +64,15 @@ function App() {
     }
   };
 
-  // Funciones de navegación
-  const goToHomePage = () => setCurrentPage("home");
-  const goToCreatePost = () => setCurrentPage("create-post");
-  const goToLoginPage = () => setCurrentPage("login");
-
-  // Función para agregar productos
-  const addProduct = (product) => {
-    setProducts((prevProducts) => [...prevProducts, product]);
-    goToHomePage();
+  const handleNavigation = (page) => {
+    setCurrentPage(page);
   };
 
-  // Función para actualizar el estado del producto
+  const addProduct = (product) => {
+    setProducts((prevProducts) => [...prevProducts, product]);
+    handleNavigation("home");
+  };
+
   const updateProductStatus = (index) => {
     setProducts((prevProducts) => {
       const updatedProducts = [...prevProducts];
@@ -83,27 +91,36 @@ function App() {
     });
   };
 
-  // Función para eliminar productos
   const deleteProduct = (index) => {
     if (index >= 0 && index < products.length) {
       setProducts((prevProducts) => prevProducts.filter((_, i) => i !== index));
     }
   };
 
-  // Funciones de login y logout
   const handleLogin = (username) => {
     setUser(username);
-    goToHomePage();
+    handleNavigation("home");
   };
 
   const handleLogout = () => {
     setUser(null);
-    goToHomePage();
+    handleNavigation("home");
   };
 
-  // Función de búsqueda
   const handleSearch = (term) => {
     setSearchTerm(term);
+  };
+
+  const goToHomePage = () => {
+    handleNavigation("home");
+  };
+
+  const goToCreatePost = () => {
+    handleNavigation("create-post");
+  };
+
+  const goToLoginPage = () => {
+    handleNavigation("login");
   };
 
   return (
@@ -120,9 +137,8 @@ function App() {
       <Footer />
     </div>
   );
-}
+};
 
-// Estilos
 const noProductsStyle = {
   color: "white",
   textAlign: "center",

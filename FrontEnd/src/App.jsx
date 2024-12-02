@@ -8,40 +8,35 @@ import Footer from "./components/Footer";
 
 const App = () => {
   const [currentPage, setCurrentPage] = useState("home");
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState([]); //compuesto por dos partes, azul variable, amarillo funcion actualizadora, parentesis tenemos el valor inicial
   const [user, setUser] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [newProducts, setNewProducts] = useState([]);
 
   useEffect(() => {
+    //fetch("link al endpoint").then((data) => data.json()).then((data) =>  setNewProducts(data))
+
     const fetchProducts = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:5000/vista_publicaciones");
-        const data = await response.json();
+        const response = await fetch("http://127.0.0.1:5000/publicaciones");
+        const data = await response.json(); //para trackear un error hay que ir aplicando console.logs
+        console.log(data);
         setNewProducts(data);
       } catch (error) {
         console.error("Error fetching publication IDs:", error);
       }
     };
     fetchProducts();
-  }, []);
+  }, []); //el useEffect se puede ejecutar una o tantas veces como sea necesario, y eso va a depender, valga la redundancia de las dependencias
 
   const renderPage = () => {
     switch (currentPage) {
       case "create-post":
         return (
-          <CreatePost
-            addProduct={addProduct}
-            goToHomePage={goToHomePage}
-          />
+          <CreatePost addProduct={addProduct} goToHomePage={goToHomePage} />
         );
       case "login":
-        return (
-          <Login
-            onLogin={handleLogin}
-            goToHomePage={goToHomePage}
-          />
-        );
+        return <Login onLogin={handleLogin} goToHomePage={goToHomePage} />;
       case "home":
       default:
         return (

@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 // Asegúrate de pasarle la función deleteProduct desde el componente padre
-function ProductList({
-  newProducts,
-  deleteProduct,
-  searchTerm,
-  user,
-}) {
+function ProductList({ newProducts, deleteProduct, searchTerm, user }) {
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 12;
 
@@ -49,9 +44,13 @@ function ProductList({
         ) : (
           currentProducts.map((product, index) => (
             <div key={product.id || index} style={productCardStyle}>
-              <img src={product.Imagen} alt={product.Titulo} style={imageStyle} />
+              <img
+                src={product.imagen}
+                alt={product.titulo}
+                style={imageStyle}
+              />
               <div style={infoStyle}>
-                <h3 style={titleStyle}>{product.Titulo}</h3>
+                <h3 style={titleStyle}>{product.titulo}</h3>
                 <ProductDescription description={product.descripcion} />
                 <p style={priceStyle}>Precio: ${product.Precio}</p>
                 <p style={stockStyle}>Stock: {product.Stock}</p>
@@ -74,7 +73,6 @@ function ProductList({
               </div>
             </div>
           ))
-          
         )}
       </div>
 
@@ -314,7 +312,4 @@ function deleteProduct(id) {
     });
 }
 
-
-
 export default ProductList;
-
